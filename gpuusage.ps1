@@ -60,6 +60,7 @@ while ($listener.IsListening) {
         if ($gpujob.State -eq "Completed")
         {
             $gpuusage = Receive-Job -Id $gpujob.Id
+	    Remove-Job -Id $gpujob.Id
 	    $gpujob = Start-Job -ScriptBlock {
 	    # 这里是job的脚本内容
 	        $getcounter = Get-Counter -Counter "\GPU Engine(*)\Utilization Percentage" -SampleInterval 1 -MaxSamples 1 -ErrorAction SilentlyContinue
@@ -77,6 +78,7 @@ while ($listener.IsListening) {
         if ($cpujob.State -eq "Completed")
         {
             $cpuusage = Receive-Job -Id $cpujob.Id
+	    Remove-Job -Id $cpujob.Id
 	    $cpujob = Start-Job -ScriptBlock {
 	    # 这里是job的脚本内容
 	        (Get-Counter '\Processor(_Total)\% Processor Time' -SampleInterval 1 -MaxSamples 1 -ErrorAction SilentlyContinue).CounterSamples.CookedValue
